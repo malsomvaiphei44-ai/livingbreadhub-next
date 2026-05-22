@@ -95,7 +95,7 @@ overflowY: "auto",
     ? "Ask something..."
     : lang === "hi"
     ? "कुछ पूछें..."
-    : "Aboi thum kha? (ask something)"
+    : "Ki hudibo? (ask something)"
           }
           style={{ flex: 1, padding: 10, borderRadius: 8 }}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
