@@ -16,8 +16,12 @@ export async function POST(req: Request) {
       contents: prompt,
     });
 
+    console.log("AI RESPONSE:", response);
+
     return Response.json({
-      reply: response.text,
+      reply:
+        response.text ||
+        "No response from AI.",
     });
   } catch (error) {
     console.error("Gemini Error:", error);
