@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <main style={{ padding: 20, fontFamily: "sans-serif", maxWidth: 600, margin: "auto" }}>
       
-      <h2 style={{ textAlign: "center" }}>🙏 LivingBreadHub AI</h2>
+      <h2 style={{ textAlign: "center" }}>🙏 LivingBreadHub AI TEST</h2>
 
       <div
   style={{
