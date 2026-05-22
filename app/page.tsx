@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { languages } from "../lib/languages";
-import { dailyVerses } from "../lib/verses";
+import { dailyVerses } from "./lib/verses";
 
 export default function Home() {
   const [input, setInput] = useState("");
