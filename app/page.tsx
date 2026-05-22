@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { languages } from "../lib/languages";
+import { dailyVerses } from "../lib/verses";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [lang, setLang] = useState("en");
+  const todayIndex = new Date().getDate() % dailyVerses.length;
+const verseData = dailyVerses[todayIndex][lang as "en" | "hi" | "ng"];
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const sendMessage = async () => {
@@ -45,7 +48,39 @@ export default function Home() {
   <button onClick={() => setLang("hi")}>HI</button>
   <button onClick={() => setLang("ng")}>NG</button>
 </div>
+<div
+  style={{
+    background: "#fff8e7",
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 15,
+    border: "1px solid #f0d98a",
+  }}
+>
+  <h3 style={{ marginBottom: 10 }}>
+    📖 {lang === "hi"
+      ? "आज का बाइबल वचन"
+      : lang === "ng"
+      ? "Aji Laga Bible Verse"
+      : "Daily Bible Verse"}
+  </h3>
 
+  <p>
+    <strong>{verseData.verse}</strong>
+  </p>
+
+  <p style={{ marginTop: 8 }}>
+    "{verseData.text}"
+  </p>
+
+  <p style={{ marginTop: 10, fontStyle: "italic" }}>
+    ✨ {verseData.inspiration}
+  </p>
+
+  <p style={{ marginTop: 10 }}>
+    🙏 {verseData.prayer}
+  </p>
+</div>
       <div
         style={{
           minHeight: "200px",
