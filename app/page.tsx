@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { languages } from "./lib/languages";
+import { languages } from "../lib/languages";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -37,7 +37,9 @@ export default function Home() {
 
   return (
     <main style={{ padding: 20, maxWidth: 600, margin: "auto", fontFamily: "sans-serif" }}>
-      <h2 style={{ textAlign: "center" }}>🙏 LivingBreadHub AI</h2>
+      <h2 style={{ textAlign: "center" }}>
+  🙏 {languages[lang].title}
+</h2>
       <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 10 }}>
   <button onClick={() => setLang("en")}>EN</button>
   <button onClick={() => setLang("hi")}>HI</button>
@@ -88,12 +90,18 @@ overflowY: "auto",
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask something..."
+          placeholder={
+  lang === "en"
+    ? "Ask something..."
+    : lang === "hi"
+    ? "कुछ पूछें..."
+    : "Aboi thum kha? (ask something)"
+          }
           style={{ flex: 1, padding: 10, borderRadius: 8 }}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button onClick={sendMessage} style={{ marginLeft: 10, padding: 10 }}>
-          Send
+          {lang === "en" ? "Send" : lang === "hi" ? "भेजें" : "Thawn"}
         </button>
       </div>
     </main>
