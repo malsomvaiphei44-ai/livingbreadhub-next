@@ -13,7 +13,7 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "@google/generative-ai": "^0.11.3"
+    "@google/genai": "^0.3.0"
   },
 
   "devDependencies": {
