@@ -8,11 +8,15 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "@google/generative-ai": "latest"
-  },
+  "next": "latest",
+  "react": "latest",
+  "react-dom": "latest",
+  "@google/generative-ai": "latest",
+  "next-auth": "latest"
+},
+    
+    
+    
   "devDependencies": {
     "typescript": "latest",
     "@types/react": "latest",
