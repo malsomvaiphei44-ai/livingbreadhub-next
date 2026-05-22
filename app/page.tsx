@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { languages } from "./lib/languages";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
+  const [lang, setLang] = useState("en");
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const sendMessage = async () => {
@@ -36,6 +38,11 @@ export default function Home() {
   return (
     <main style={{ padding: 20, maxWidth: 600, margin: "auto", fontFamily: "sans-serif" }}>
       <h2 style={{ textAlign: "center" }}>🙏 LivingBreadHub AI</h2>
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 10 }}>
+  <button onClick={() => setLang("en")}>EN</button>
+  <button onClick={() => setLang("hi")}>HI</button>
+  <button onClick={() => setLang("ng")}>NG</button>
+</div>
 
       <div
         style={{
