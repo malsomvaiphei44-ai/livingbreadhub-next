@@ -1,30 +1,37 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+const genAI = new GoogleGenerativeAI(
+  process.env.GEMINI_API_KEY || ""
+);
+
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+    const messages = body.messages || [];
+
+    const lastMessage =
+      messages[messages.length - 1]?.content || "";
 
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
     });
 
-    const latestMessage =
-      messages?.[messages.length - 1]?.content || "Hello";
+    const result = await model.generateContent(lastMessage);
 
-    const result = await model.generateContent(latestMessage);
     const response = await result.response;
 
+    const text = response.text();
+
     return Response.json({
-      reply: response.text(),
+      reply: text,
     });
   } catch (error) {
-    return Response.json(
-      {
-        reply: "AI is currently unavailable. Please try again.",
-      },
-      { status: 500 }
-    );
+    console.error(error);
+
+    return Response.json({
+      reply:
+        "AI is currently unavailable. Please try again.",
+    });
   }
 }
