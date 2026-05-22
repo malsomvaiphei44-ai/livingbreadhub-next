@@ -41,7 +41,16 @@ export default function Home() {
       
       <h2 style={{ textAlign: "center" }}>🙏 LivingBreadHub AI</h2>
 
-      <div style={{ height: 400, overflowY: "auto", border: "1px solid #ddd", padding: 10, borderRadius: 10 }}>
+      <div
+  style={{
+    height: "60vh",
+    overflowY: "auto",
+    border: "1px solid #ddd",
+    padding: 10,
+    borderRadius: 10,
+    background: "#fafafa"
+  }}
+>
         {messages.map((m, i) => (
           <div
             key={i}
