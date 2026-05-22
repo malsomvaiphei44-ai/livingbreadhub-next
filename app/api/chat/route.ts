@@ -1,8 +1,8 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY || ""
-);
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY || "",
+});
 
 export async function POST(req: Request) {
   try {
@@ -11,18 +11,13 @@ export async function POST(req: Request) {
     const prompt =
       body.messages?.[body.messages.length - 1]?.content || "";
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-pro",
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
     });
 
-    const result = await model.generateContent(prompt);
-
-    const response = await result.response;
-
-    const text = response.text();
-
     return Response.json({
-      reply: text,
+      reply: response.text,
     });
   } catch (error) {
     console.error("Gemini Error:", error);
