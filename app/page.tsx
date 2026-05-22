@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { languages } from "../lib/languages";
+import { languages } from "./lib/languages";
 import { dailyVerses } from "./lib/verses";
 
 export default function Home() {
