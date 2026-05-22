@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       messages[messages.length - 1]?.content || "";
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-pro",
+      model: "models/gemini-pro",
     });
 
     const result = await model.generateContent(lastMessage);
