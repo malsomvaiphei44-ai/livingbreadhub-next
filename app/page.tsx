@@ -1,28 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const updatedMessages = [
+    const updated = [
       ...messages,
       { role: "user", content: input },
     ];
 
-    setMessages(updatedMessages);
+    setMessages(updated);
     setInput("");
 
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        messages: updatedMessages,
-      }),
+      body: JSON.stringify({ messages: updated }),
     });
 
     const data = await res.json();
@@ -33,28 +32,53 @@ export default function Home() {
     ]);
   };
 
-  return (
-    <main style={{ padding: 20, fontFamily: "sans-serif" }}>
-      <h1>🙏 LivingBreadHub AI</h1>
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-      <div style={{ marginTop: 20 }}>
+  return (
+    <main style={{ padding: 20, fontFamily: "sans-serif", maxWidth: 600, margin: "auto" }}>
+      
+      <h2 style={{ textAlign: "center" }}>🙏 LivingBreadHub AI</h2>
+
+      <div style={{ height: 400, overflowY: "auto", border: "1px solid #ddd", padding: 10, borderRadius: 10 }}>
         {messages.map((m, i) => (
-          <p key={i}>
-            <b>{m.role}:</b> {m.content}
-          </p>
+          <div
+            key={i}
+            style={{
+              textAlign: m.role === "user" ? "right" : "left",
+              margin: "10px 0",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 12px",
+                borderRadius: 12,
+                background: m.role === "user" ? "#DCF8C6" : "#F1F0F0",
+              }}
+            >
+              {m.content}
+            </span>
+          </div>
         ))}
+        <div ref={chatEndRef} />
       </div>
 
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Ask something..."
-        style={{ padding: 8, marginTop: 20, width: "70%" }}
-      />
+      <div style={{ display: "flex", marginTop: 10 }}>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask something..."
+          style={{ flex: 1, padding: 10, borderRadius: 8 }}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+        />
 
-      <button onClick={sendMessage} style={{ padding: 8, marginLeft: 10 }}>
-        Send
-      </button>
+        <button onClick={sendMessage} style={{ marginLeft: 10, padding: 10 }}>
+          Send
+        </button>
+      </div>
+
     </main>
   );
 }
