@@ -42,7 +42,7 @@ export default function Home() {
 
     setMessages((prev) => [
       ...prev,
-      { role: "assistant", content: data.reply },
+      { role: "assistant", content: data.reply || "No AI response received."
     ]);
   };
 
