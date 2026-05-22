@@ -39,14 +39,21 @@ export default function Home() {
 
       <div
         style={{
-          height: "60vh",
-          overflowY: "auto",
+          minHeight: "200px",
+maxHeight: "60vh",
+overflowY: "auto",
+          
           border: "1px solid #ddd",
           padding: 10,
           borderRadius: 10,
           background: "#fafafa",
         }}
       >
+        {messages.length === 0 && (
+  <p style={{ textAlign: "center", color: "#888" }}>
+    Start chatting with LivingBreadHub AI 🙏
+  </p>
+)}
         {messages.map((m, i) => (
           <div
             key={i}
