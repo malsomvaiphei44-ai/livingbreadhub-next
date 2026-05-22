@@ -8,9 +8,21 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [lang, setLang] = useState("en");
-  const todayIndex = new Date().getDate() % dailyVerses.length;
-const verseData = dailyVerses[todayIndex][lang as "en" | "hi" | "ng"];
+  const [darkMode, setDarkMode] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+
+  const todayIndex = new Date().getDate() % dailyVerses.length;
+  const verseData = dailyVerses[todayIndex][lang as "en" | "hi" | "ng"];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -30,7 +42,7 @@ const verseData = dailyVerses[todayIndex][lang as "en" | "hi" | "ng"];
 
     setMessages((prev) => [
       ...prev,
-      { role: "ai", content: data.reply },
+      { role: "assistant", content: data.reply },
     ]);
   };
 
@@ -38,107 +50,273 @@ const verseData = dailyVerses[todayIndex][lang as "en" | "hi" | "ng"];
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  return (
-    <main style={{ padding: 20, maxWidth: 600, margin: "auto", fontFamily: "sans-serif" }}>
-      <h2 style={{ textAlign: "center" }}>
-  🙏 {languages[lang].title}
-</h2>
-      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 10 }}>
-  <button onClick={() => setLang("en")}>EN</button>
-  <button onClick={() => setLang("hi")}>HI</button>
-  <button onClick={() => setLang("ng")}>NG</button>
-</div>
-<div
-  style={{
-    background: "#fff8e7",
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 15,
-    border: "1px solid #f0d98a",
-  }}
->
-  <h3 style={{ marginBottom: 10 }}>
-    📖 {lang === "hi"
-      ? "आज का बाइबल वचन"
-      : lang === "ng"
-      ? "Aji Laga Bible Verse"
-      : "Daily Bible Verse"}
-  </h3>
-
-  <p>
-    <strong>{verseData.verse}</strong>
-  </p>
-
-  <p style={{ marginTop: 8 }}>
-    "{verseData.text}"
-  </p>
-
-  <p style={{ marginTop: 10, fontStyle: "italic" }}>
-    ✨ {verseData.inspiration}
-  </p>
-
-  <p style={{ marginTop: 10 }}>
-    🙏 {verseData.prayer}
-  </p>
-</div>
-      <div
+  if (showSplash) {
+    return (
+      <main
         style={{
-          minHeight: "200px",
-maxHeight: "60vh",
-overflowY: "auto",
-          
-          border: "1px solid #ddd",
-          padding: 10,
-          borderRadius: 10,
-          background: "#fafafa",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "linear-gradient(to bottom, #111827, #1f2937)",
+          color: "white",
         }}
       >
-        {messages.length === 0 && (
-  <p style={{ textAlign: "center", color: "#888" }}>
-    Start chatting with LivingBreadHub AI 🙏
-  </p>
-)}
-        {messages.map((m, i) => (
-          <div
-            key={i}
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/833/833472.png"
+          alt="LivingBreadHub Logo"
+          style={{
+            width: 100,
+            height: 100,
+            marginBottom: 20,
+            animation: "pulse 2s infinite",
+          }}
+        />
+
+        <h1 style={{ fontSize: 32, marginBottom: 10 }}>
+          🙏 LivingBreadHub
+        </h1>
+
+        <p style={{ opacity: 0.8 }}>
+          Daily Faith • AI • Worship
+        </p>
+
+        <style jsx>{`
+          @keyframes pulse {
+            0% {
+              transform: scale(1);
+            }
+            50% {
+              transform: scale(1.08);
+            }
+            100% {
+              transform: scale(1);
+            }
+          }
+        `}</style>
+      </main>
+    );
+  }
+
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        padding: 20,
+        background: darkMode
+          ? "linear-gradient(to bottom, #111827, #1f2937)"
+          : "linear-gradient(to bottom, #fdfcfb, #e2d1c3)",
+        color: darkMode ? "white" : "black",
+        transition: "0.3s",
+        fontFamily: "sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 700,
+          margin: "auto",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+        >
+          <h1>🙏 {languages[lang].title}</h1>
+
+          <button
+            onClick={() => setDarkMode(!darkMode)}
             style={{
-              textAlign: m.role === "user" ? "right" : "left",
-              margin: "10px 0",
+              padding: "10px 14px",
+              borderRadius: 10,
+              border: "none",
+              cursor: "pointer",
+              background: darkMode ? "#374151" : "#111827",
+              color: "white",
             }}
           >
-            <span
+            {darkMode ? "☀ Light" : "🌙 Dark"}
+          </button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            justifyContent: "center",
+            marginBottom: 20,
+          }}
+        >
+          <button onClick={() => setLang("en")}>EN</button>
+          <button onClick={() => setLang("hi")}>HI</button>
+          <button onClick={() => setLang("ng")}>NG</button>
+        </div>
+
+        <div
+          style={{
+            background: darkMode ? "#1f2937" : "#fff8e7",
+            padding: 20,
+            borderRadius: 16,
+            marginBottom: 20,
+            border: darkMode
+              ? "1px solid #374151"
+              : "1px solid #f0d98a",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
+          <h2 style={{ marginBottom: 10 }}>
+            📖 {lang === "hi"
+              ? "आज का बाइबल वचन"
+              : lang === "ng"
+              ? "Aji Laga Bible Verse"
+              : "Daily Bible Verse"}
+          </h2>
+
+          <p>
+            <strong>{verseData.verse}</strong>
+          </p>
+
+          <p style={{ marginTop: 10 }}>
+            "{verseData.text}"
+          </p>
+
+          <p style={{ marginTop: 12, fontStyle: "italic" }}>
+            ✨ {verseData.inspiration}
+          </p>
+
+          <p style={{ marginTop: 12 }}>
+            🙏 {verseData.prayer}
+          </p>
+        </div>
+
+        <div
+          style={{
+            background: darkMode ? "#1f2937" : "white",
+            padding: 20,
+            borderRadius: 16,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
+          <h2 style={{ marginBottom: 15 }}>
+            🤖 AI Faith Assistant
+          </h2>
+
+          <div
+            style={{
+              minHeight: 250,
+              maxHeight: "50vh",
+              overflowY: "auto",
+              border: darkMode
+                ? "1px solid #374151"
+                : "1px solid #ddd",
+              padding: 15,
+              borderRadius: 12,
+              background: darkMode ? "#111827" : "#fafafa",
+            }}
+          >
+            {messages.length === 0 && (
+              <p
+                style={{
+                  textAlign: "center",
+                  opacity: 0.7,
+                }}
+              >
+                Start chatting with LivingBreadHub AI 🙏
+              </p>
+            )}
+
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                style={{
+                  textAlign:
+                    m.role === "user" ? "right" : "left",
+                  margin: "12px 0",
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "10px 14px",
+                    borderRadius: 14,
+                    background:
+                      m.role === "user"
+                        ? "#2563eb"
+                        : darkMode
+                        ? "#374151"
+                        : "#f1f0f0",
+                    color:
+                      m.role === "user"
+                        ? "white"
+                        : darkMode
+                        ? "white"
+                        : "black",
+                    maxWidth: "80%",
+                  }}
+                >
+                  {m.content}
+                </span>
+              </div>
+            ))}
+
+            <div ref={chatEndRef} />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              marginTop: 15,
+              gap: 10,
+            }}
+          >
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={
+                lang === "en"
+                  ? "Ask something..."
+                  : lang === "hi"
+                  ? "कुछ पूछें..."
+                  : "Ki hudibo?"
+              }
               style={{
-                display: "inline-block",
-                padding: "8px 12px",
+                flex: 1,
+                padding: 14,
                 borderRadius: 12,
-                background: m.role === "user" ? "#DCF8C6" : "#F1F0F0",
+                border: "none",
+                outline: "none",
+                background: darkMode ? "#374151" : "#f3f4f6",
+                color: darkMode ? "white" : "black",
+              }}
+              onKeyDown={(e) =>
+                e.key === "Enter" && sendMessage()
+              }
+            />
+
+            <button
+              onClick={sendMessage}
+              style={{
+                padding: "14px 18px",
+                borderRadius: 12,
+                border: "none",
+                background: "#2563eb",
+                color: "white",
+                cursor: "pointer",
               }}
             >
-              {m.content}
-            </span>
+              {lang === "en"
+                ? "Send"
+                : lang === "hi"
+                ? "भेजें"
+                : "Send"}
+            </button>
           </div>
-        ))}
-        <div ref={chatEndRef} />
-      </div>
-
-      <div style={{ display: "flex", marginTop: 10 }}>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={
-  lang === "en"
-    ? "Ask something..."
-    : lang === "hi"
-    ? "कुछ पूछें..."
-    : "Ki hudibo? (ask something)"
-          }
-          style={{ flex: 1, padding: 10, borderRadius: 8 }}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-        />
-        <button onClick={sendMessage} style={{ marginLeft: 10, padding: 10 }}>
-          {lang === "en" ? "Send" : lang === "hi" ? "भेजें" : "Thawn"}
-        </button>
+        </div>
       </div>
     </main>
   );
-        }
+    }
