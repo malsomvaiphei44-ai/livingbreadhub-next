@@ -8,16 +8,14 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const messages = body.messages || [];
-
-    const lastMessage =
-      messages[messages.length - 1]?.content || "";
+    const prompt =
+      body.messages?.[body.messages.length - 1]?.content || "";
 
     const model = genAI.getGenerativeModel({
-      model: "models/gemini-pro",
+      model: "gemini-1.5-flash",
     });
 
-    const result = await model.generateContent(lastMessage);
+    const result = await model.generateContent(prompt);
 
     const response = await result.response;
 
@@ -27,7 +25,7 @@ export async function POST(req: Request) {
       reply: text,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Gemini Error:", error);
 
     return Response.json({
       reply:
